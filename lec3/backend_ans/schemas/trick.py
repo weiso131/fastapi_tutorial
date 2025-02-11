@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Optional
+from beanie import Document
 
 class TrickBase(BaseModel):
     name: str = Field(..., description="Name of the trick")
@@ -8,6 +9,9 @@ class TrickBase(BaseModel):
     tips: Optional[str] = Field(None, description="The text description of the trick tips")
 
 class TrickCreate(TrickBase):
+    pass
+
+class Trick(TrickBase, Document):
     pass
 
 class TrickUpdate(TrickBase):
