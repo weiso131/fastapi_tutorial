@@ -15,7 +15,7 @@ class TrickUpdate(TrickBase):
     name: Optional[str] = Field(..., description="Name of the trick")
     difficulty: Optional[int] = Field(..., description="Difficulty can be the humber from 1 to 10")
     def get_update_data(self):
-        update_data = self.dict(exclude={"old_name"}, exclude_none=True)
+        update_data = self.model_dump(exclude={"old_name"}, exclude_none=True)
         return update_data
 
 
