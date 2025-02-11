@@ -6,7 +6,7 @@ app = FastAPI()
 trick_list = []
 
 TRICK_ALREADY_EXIST = HTTPException(status_code=400, detail="Trick already exists")
-
+TRICK_NOT_FOUND = HTTPException(status_code=404, detail="Trick not found")
 @app.get("/tricks")
 def get_tricks():
     return trick_list
@@ -21,6 +21,6 @@ def add_trick(trick: str):
 @app.delete("/delete_trick/")
 def delete_trick(trick: str):
     if trick not in trick_list:
-        raise HTTPException(status_code=404, detail="Trick not found")
+        raise TRICK_NOT_FOUND
     trick_list.remove(trick)
     return {"message": f"Trick '{trick}' deleted successfully"}
