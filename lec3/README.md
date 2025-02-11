@@ -1,3 +1,36 @@
+# async 非同步
+在處理一些耗時操作(IO操作、網路請求)，可以利用非同步的特性先讓程式先去處理其他任務
+
+## 範例
+```python=
+import asyncio
+
+async def task_1():
+    print("任務1開始")
+    await asyncio.sleep(1)
+    print("任務1結束")
+
+async def task_2():
+    print("任務2開始")
+    await asyncio.sleep(2)
+    print("任務2結束")
+
+async def main():
+    # 同時執行兩個非同步任務
+    await asyncio.gather(task_1(), task_2())
+    
+
+# 啟動事件迴圈
+asyncio.run(main())
+```
+### 執行結果
+```
+任務1開始
+任務2開始
+任務1結束
+任務2結束
+```
+
 # AsyncIOMotorClient
 
 AsyncIOMotorClient 是 Motor 提供的一個用於與 MongoDB 進行非同步連線的客戶端，基於 asyncio 事件循環進行非同步操作。
@@ -95,3 +128,14 @@ async def delete_user(name: str):
     if user:
         await user.delete()
 ```
+
+# 環境變數
+有時候，開源專案存在一些敏感資訊(這邊有dc名稱, uri, secret_key)
+可以用環境變數的方法避免直接將這些資訊傳到github上
+參考： [Day 10 環境變數](https://ithelp.ithome.com.tw/articles/10326207)
+
+# lifespan
+[Day 29 定時任務與健康狀態檢查](https://ithelp.ithome.com.tw/articles/10338847)有提到startup事件，但這東西已經被棄用，改為使用新的lifespan比較好
+
+# 練習
+與上一個完全相同，只是將招式儲存在資料庫
