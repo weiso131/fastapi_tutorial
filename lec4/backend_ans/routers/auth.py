@@ -1,8 +1,6 @@
 from fastapi import APIRouter
 from .utils.jwt import *
 import uuid
-
-
 import bcrypt
 
 from schemas.user import UserCreate, User
@@ -14,24 +12,15 @@ router = APIRouter()
 @router.post('/register')
 async def register(data: UserCreate):
     hashpw = bcrypt.hashpw(data.password.encode(), bcrypt.gensalt())
-    uid = uuid.uuid4()
+    user_dict = data.model_dump()
+    user_dict['password'] = hashpw.decode("utf-8")
+    user_dict['uid'] = str(uuid.uuid4())
 
-    find = await User.find_one(User.email == data.email)
-    if find:
+    if await User.find_one(User.email == data.email):
         return USER_ALREADY_EXISTS
+    jwt_token = generate_tokens(user_dict)
 
-    user = {
-        "uid": str(uid),
-        "name": str(data.name),
-        "password": hashpw.decode("utf-8"),
-        "email": str(data.email),
-        "sex": bool(data.sex),
-        "age": int(data.age),
-        "identity": int(data.identity),
-    }
-    jwt_token = generate_tokens(user)
-
-    await User.insert_one(User(**user))
+    await User.insert_one(User(**user_dict))
 
     return jwt_token
 
@@ -46,11 +35,4 @@ async def login(email: str, password: str):
     user_dict = user.model_dump()
     user_dict.pop("id", None)
 
-
     return generate_tokens(user_dict)
-
-
-
-@router.put('/refresh')
-def refresh(data=UserDepend):
-    return generate_tokens(data)

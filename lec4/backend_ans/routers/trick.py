@@ -2,6 +2,8 @@ from fastapi import APIRouter
 
 from exception import *
 from schemas.trick import TrickCreate, TrickUpdate, Trick, TrickBase
+from .utils.jwt import UserDepend
+
 router = APIRouter()
 
 
@@ -12,14 +14,14 @@ async def get_tricks():
     return trick_list
 
 @router.post("/add_trick")
-async def add_trick(trick: TrickCreate):
+async def add_trick(trick: TrickCreate, payload=UserDepend):
     if await Trick.find_one(Trick.name == trick.name):
         raise TRICK_ALREADY_EXIST
     await Trick.insert_one(Trick(**(trick.model_dump())))
     return {"message": f"Trick '{trick.name}' added successfully"}
 
 @router.patch("/update_trick")
-async def update_trick(trick_update: TrickUpdate):
+async def update_trick(trick_update: TrickUpdate, payload=UserDepend):
     trick = await Trick.find_one(Trick.name == trick_update.old_name)
     if trick is None:
         raise TRICK_NOT_FOUND
@@ -29,7 +31,7 @@ async def update_trick(trick_update: TrickUpdate):
 
     return {"message": f"Trick '{trick_update.old_name}' updated successfully"}
 @router.delete("/delete_trick/")
-async def delete_trick(trick_name: str):
+async def delete_trick(trick_name: str, payload=UserDepend):
     trick = await Trick.find_one(Trick.name == trick_name)
     if trick is None:
         raise TRICK_NOT_FOUND
