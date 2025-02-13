@@ -2,11 +2,11 @@ import jwt
 import datetime
 from fastapi import Depends, Security
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from config import settings
+from config import SECRET_KEY
 from exception import *
 
 # 秘鑰和加密算法
-SECRET_KEY = settings.secret_key
+SECRET_KEY = SECRET_KEY
 ALGORITHM = "HS256"
 
 # Token 有效期設置
