@@ -8,16 +8,16 @@ python3 -m venv fastapi
 ## 啟用虛擬環境
 ### Linux/MacOS
 ```
-source venv/bin/activate
+source fastapi/bin/activate
 ```
 ### Windows (CMD)
 ```
-.\venv\Scripts\activate
+.\fastapi\Scripts\activate
 ```
 
 ### Windows (PowerShell)
 ```
-.\venv\Scripts\Activate.ps1
+.\fastapi\Scripts\Activate.ps1
 ```
 ## 安裝所需套件
 ```
